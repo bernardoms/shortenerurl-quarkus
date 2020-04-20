@@ -27,13 +27,13 @@ If you want to learn more about building native executables, please consult http
 
 ## Running using docker-compose
 
-###Native:
+### Native:
 
 To running the native image you need to create a native executable using the step Creating a native executable and then
 `cd deps/native` and use `docker-compose build` to build an image of the project. Then `docker-compose up -d`
 to bring up a mongo container and then the project container using the native image.
 
-###Using Jar:
+### Using Jar:
 To running without a native image you need to create the package using the Packaging and running the application step.
 Then `cd deps` and use `docker-compose` build to build an image of the project. Then `docker-compose up -d`
 to bring up a mongo container and then the project container using the openjdk11 with jar.
