@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: test
+      MONGO_INITDB_ROOT_USERNAME: test
+      MONGO_INITDB_ROOT_PASSWORD: test
+      MONGO_NON_ROOT_USERNAM: test
+      MONGO_NON_ROOT_PASSWORD: test
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-volume:/data/db
+
+  shortenerurl-quarkus:
+    build:
+      dockerfile: ./src/main/docker/Dockerfile
+      context: ../../shortenerurl-quarkus
+    ports:
+      - "8080:8080"
+    environment:
+      JAVA_OPTIONS: "-Dquarkus.http.host=0.0.0.0 -Dquarkus.mongodb.connection-string=mongodb://test:test@mongo:27017/local?authSource=admin&authMechanism=SCRAM-SHA-1 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dnewrelic.config.app_name=v1/shortenerurl-quarkus -Dnewrelic.config.license_key= -Dquarkus.profile=dev -javaagent:/deployments/newrelic/newrelic.jar "
+    depends_on:
+      - mongo

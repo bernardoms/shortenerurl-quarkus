@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: test
+      MONGO_INITDB_ROOT_USERNAME: test
+      MONGO_INITDB_ROOT_PASSWORD: test
+      MONGO_NON_ROOT_USERNAM: test
+      MONGO_NON_ROOT_PASSWORD: test
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-volume:/data/db
+
+  shortenerurl-quarkus:
+    build:
+      dockerfile: ./src/main/docker/native/Dockerfile
+      context: ../../../shortenerurl-quarkus
+    ports:
+      - "8080:8080"
+    environment:
+      QUARKUS_PROFILE: dev
+      QUARKUS_MONGODB_CONNECTION_STRING: mongodb://test:test@mongo:27017/local?authSource=admin&authMechanism=SCRAM-SHA-1
+      QUARKUS_MONGODB_DATABASE: local
+    depends_on:
+      - mongo
